@@ -1,20 +1,22 @@
 package ua.raif.courses.serivce;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.DataBinder;
 import ua.raif.courses.api.dto.ConferenceViewDto;
 import ua.raif.courses.api.dto.TalkCreateDto;
 import ua.raif.courses.api.dto.TalkViewDto;
 import ua.raif.courses.dao.TalkDao;
 import ua.raif.courses.dao.entity.ConferenceEntity;
 import ua.raif.courses.dao.entity.TalkEntity;
-import ua.raif.courses.domain.ConferenceDates;
+import ua.raif.courses.domain.Conference;
 import ua.raif.courses.domain.Talk;
 import ua.raif.courses.exceptions.AlreadyExistsException;
 import ua.raif.courses.exceptions.SpeakerException;
-import ua.raif.courses.serivce.validators.DatePeriodValidator;
-import ua.raif.courses.serivce.validators.StartDateValidator;
+import ua.raif.courses.serivce.validators.ConferenceDatesOverlapValidator;
+import ua.raif.courses.serivce.validators.ConferenceStartDateValidator;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -23,14 +25,11 @@ import java.util.List;
 @Slf4j
 @Service
 @Transactional
+@AllArgsConstructor
 public class TalkServiceImpl implements TalkService {
     private final TalkDao talkDao;
     private final ConferenceService conferenceService;
-
-    public TalkServiceImpl(TalkDao talkDao, ConferenceService conferenceService) {
-        this.talkDao = talkDao;
-        this.conferenceService = conferenceService;
-    }
+    private ConferenceStartDateValidator conferenceValidator;
 
     @Override
     public Long addTalk(TalkCreateDto talk, Long conferenceId) {
@@ -42,10 +41,12 @@ public class TalkServiceImpl implements TalkService {
             throw new SpeakerException("Speaker <" + talk.getSpeaker() + "> has too many talks.");
         }
 
-        ConferenceEntity conference = conferenceService.getById(conferenceId);
-        StartDateValidator.validate(conference.getDateStart());
+        Conference conference = Conference.fromEntity(conferenceService.getById(conferenceId));
+        final DataBinder dataBinder = new DataBinder(conference.getDates());
+        dataBinder.addValidators(conferenceValidator);
+        dataBinder.validate();
 
-        TalkEntity dbTalk = Talk.fromDto(talk, conference).asEntity();
+        TalkEntity dbTalk = Talk.fromDto(talk, conference.asEntity()).asEntity();
         return talkDao.save(dbTalk).getId();
     }
 

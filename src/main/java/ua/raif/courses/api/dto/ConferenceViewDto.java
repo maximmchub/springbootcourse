@@ -2,8 +2,6 @@ package ua.raif.courses.api.dto;
 
 import lombok.*;
 
-import javax.swing.text.TabableView;
-import java.util.Set;
 @ToString
 @Builder
 @AllArgsConstructor

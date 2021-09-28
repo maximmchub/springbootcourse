@@ -1,5 +1,6 @@
 package ua.raif.courses.serivce;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,8 @@ import ua.raif.courses.dao.entity.ConferenceEntity;
 import ua.raif.courses.domain.Conference;
 import ua.raif.courses.exceptions.AlreadyExistsException;
 import ua.raif.courses.exceptions.NotExistsException;
-import ua.raif.courses.serivce.validators.DatePeriodValidator;
+import ua.raif.courses.serivce.validators.ConferenceDatesOverlapValidator;
+import ua.raif.courses.serivce.validators.ConferenceExistValidator;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -20,22 +22,18 @@ import java.util.List;
 @Slf4j
 @Service
 @Transactional
+@AllArgsConstructor
 public class ConferenceServiceImpl implements ConferenceService {
     private final ConferenceDao conferenceDao;
 
-    public ConferenceServiceImpl(ConferenceDao conferenceDao) {
-        this.conferenceDao = conferenceDao;
-    }
-
     @Override
     public Long addConference(ConferenceCreateDto conferenceDto) {
-        if (isConferenceExist(conferenceDto.getCaption())) {
-            throw new AlreadyExistsException("Conference with caption <" + conferenceDto.getCaption() + "> already exists.");
-        }
-        List<ConferenceEntity> conferences = getAll();
-        ConferenceEntity dbConference = Conference.fromDto(conferenceDto).asEntity();
-        DatePeriodValidator.validate(conferences,dbConference);
-        return conferenceDao.save(dbConference).getId();
+        Conference conference = Conference.fromDto(conferenceDto);
+
+        new ConferenceExistValidator(this).validate(conference, null);
+        new ConferenceDatesOverlapValidator(this).validate(conference.getDates(), null);
+
+        return conferenceDao.save(conference.asEntity()).getId();
     }
 
     @Override

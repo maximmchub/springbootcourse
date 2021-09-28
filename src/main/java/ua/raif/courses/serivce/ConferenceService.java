@@ -21,4 +21,6 @@ public interface ConferenceService {
     List<ConferenceEntity> getAll();
 
     ConferenceEntity getById(Long id);
+
+    boolean isConferenceExist(String caption);
 }
