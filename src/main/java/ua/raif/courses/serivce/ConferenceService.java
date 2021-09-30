@@ -10,9 +10,9 @@ import java.util.List;
 
 @Validated
 public interface ConferenceService {
-    Long addConference(@Valid ConferenceCreateDto conference);
+    ConferenceViewDto addConference(@Valid ConferenceCreateDto conference);
 
-    Long updateConference(@Valid ConferenceCreateDto conference, Long conferenceId);
+    ConferenceViewDto updateConference(@Valid ConferenceCreateDto conference, Long conferenceId);
 
     List<ConferenceViewDto> findAllConferences();
 

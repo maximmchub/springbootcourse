@@ -29,7 +29,7 @@ public class ConferenceDatesOverlapValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        ConferenceDates newConferenceDates = (ConferenceDates) target;
+        var newConferenceDates = (ConferenceDates) target;
         var conferences = conferenceService.getAll();
 
         RangeSet<LocalDate> dateRangeSet = TreeRangeSet.create();

@@ -23,7 +23,7 @@ public class ConferenceExistValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        Conference conference = (Conference) target;
+        var conference = (Conference) target;
         if (conferenceService.isConferenceExist(conference.getCaption())) {
             LOG.info("Conference with caption <" + conference.getCaption() + "> already exists.");
             throw new AlreadyExistsException("Conference with caption <" + conference.getCaption() + "> already exists.");

@@ -10,7 +10,7 @@ import java.util.List;
 @Validated
 public interface TalkService {
 
-    Long addTalk(@Valid TalkCreateDto talk, Long conferenceId);
+    TalkViewDto addTalk(@Valid TalkCreateDto talk, Long conferenceId);
 
     List<TalkViewDto> findAllTalksInConference(Long conferenceId);
 }

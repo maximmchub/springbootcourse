@@ -27,24 +27,24 @@ public class ConferenceServiceImpl implements ConferenceService {
     private final ConferenceDao conferenceDao;
 
     @Override
-    public Long addConference(ConferenceCreateDto conferenceDto) {
+    public ConferenceViewDto addConference(ConferenceCreateDto conferenceDto) {
         Conference conference = Conference.fromDto(conferenceDto);
 
         new ConferenceExistValidator(this).validate(conference, null);
         new ConferenceDatesOverlapValidator(this).validate(conference.getDates(), null);
 
-        return conferenceDao.save(conference.asEntity()).getId();
+        return Conference.fromEntity(conferenceDao.save(conference.asEntity())).asDto();
     }
 
     @Override
-    public Long updateConference(ConferenceCreateDto conferenceDto, Long conferenceId) {
+    public ConferenceViewDto updateConference(ConferenceCreateDto conferenceDto, Long conferenceId) {
         if (!conferenceDao.existsById(conferenceId)) {
             throw new NotExistsException("Falid to update conference #" + conferenceId + ". Confrerence not exists.");
         }
         ConferenceEntity dbConference = Conference.fromDto(conferenceDto).asEntity();
         dbConference.setId(conferenceId);
 
-        return conferenceDao.save(dbConference).getId();
+        return Conference.fromEntity(conferenceDao.save(dbConference)).asDto();
     }
 
     @Override
@@ -68,7 +68,6 @@ public class ConferenceServiceImpl implements ConferenceService {
     public ConferenceEntity getById(Long id) {
         return conferenceDao.findById(id).orElseThrow(() -> new NotExistsException("Falid to cet conference #" + id + ". Confrerence not exists."));
     }
-
 
     @Override
     public ConferenceViewDto getConferenceById(Long id) {

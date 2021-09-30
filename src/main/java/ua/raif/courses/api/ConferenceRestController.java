@@ -25,12 +25,12 @@ public class ConferenceRestController {
     private final TalkService talkService;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    Long addConference(@RequestBody ConferenceCreateDto conference) {
+    ConferenceViewDto addConference(@RequestBody ConferenceCreateDto conference) {
         return conferenceService.addConference(conference);
     }
 
     @PutMapping(path = "/{conferenceId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    Long updateConference(@PathVariable("conferenceId") Long conferenceId, @RequestBody @Valid ConferenceCreateDto conference) {
+    ConferenceViewDto updateConference(@PathVariable("conferenceId") long conferenceId, @RequestBody @Valid ConferenceCreateDto conference) {
         return conferenceService.updateConference(conference, conferenceId);
     }
 
@@ -41,12 +41,12 @@ public class ConferenceRestController {
     }
 
     @PostMapping(path = "/{conferenceId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    Long addTalk(@PathVariable("conferenceId") Long conferenceId, @RequestBody @Valid TalkCreateDto talk) {
+    TalkViewDto addTalk(@PathVariable("conferenceId") long conferenceId, @RequestBody @Valid TalkCreateDto talk) {
         return talkService.addTalk(talk, conferenceId);
     }
 
     @GetMapping(path = "/{conferenceId}/talks", produces = MediaType.APPLICATION_JSON_VALUE)
-    List<TalkViewDto> findAllTalksIn(@PathVariable("conferenceId") Long conferenceId) {
+    List<TalkViewDto> findAllTalksIn(@PathVariable("conferenceId") long conferenceId) {
         return talkService.findAllTalksInConference(conferenceId);
     }
 
