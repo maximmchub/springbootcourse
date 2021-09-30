@@ -22,5 +22,4 @@ public interface ConferenceService {
 
     ConferenceEntity getById(Long id);
 
-    boolean isConferenceExist(String caption);
 }

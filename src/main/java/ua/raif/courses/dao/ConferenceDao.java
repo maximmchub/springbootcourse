@@ -4,4 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ua.raif.courses.dao.entity.ConferenceEntity;
 
 public interface ConferenceDao  extends JpaRepository<ConferenceEntity, Long> {
+
+        boolean existsByCaption(String caption);
 }

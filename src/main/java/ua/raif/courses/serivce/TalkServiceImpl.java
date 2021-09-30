@@ -10,10 +10,11 @@ import ua.raif.courses.dao.entity.TalkEntity;
 import ua.raif.courses.domain.Conference;
 import ua.raif.courses.domain.Talk;
 import ua.raif.courses.exceptions.AlreadyExistsException;
+import ua.raif.courses.exceptions.DateValidationException;
 import ua.raif.courses.exceptions.SpeakerException;
-import ua.raif.courses.serivce.validators.ConferenceStartDateValidator;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,6 @@ import java.util.List;
 public class TalkServiceImpl implements TalkService {
     private final TalkDao talkDao;
     private final ConferenceService conferenceService;
-    private ConferenceStartDateValidator conferenceValidator;
 
     @Override
     public TalkViewDto addTalk(TalkCreateDto talk, Long conferenceId) {
@@ -37,7 +37,7 @@ public class TalkServiceImpl implements TalkService {
         }
 
         Conference conference = Conference.fromEntity(conferenceService.getById(conferenceId));
-        new ConferenceStartDateValidator(conferenceService).validate(conference.getDates(), null);
+        validateConferenceStartdate(conference);
 
         TalkEntity dbTalk = Talk.fromDto(talk, conference.asEntity()).asEntity();
         return Talk.fromEntity(talkDao.save(dbTalk)).asDto();
@@ -55,4 +55,12 @@ public class TalkServiceImpl implements TalkService {
         return talkViewDtos;
     }
 
+    public void validateConferenceStartdate(Conference conference) {
+        LocalDate deadLineDate = conference.getDates().getStartDate().minusMonths(1);
+        if (LocalDate.now().isAfter(deadLineDate)) {
+            LOG.info("Date is after deadline.");
+            throw new DateValidationException("Date is after deadline.");
+        }
+
+    }
 }

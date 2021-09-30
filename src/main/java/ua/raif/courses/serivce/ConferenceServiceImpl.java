@@ -1,8 +1,10 @@
 package ua.raif.courses.serivce;
 
+import com.google.common.collect.Range;
+import com.google.common.collect.RangeSet;
+import com.google.common.collect.TreeRangeSet;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import ua.raif.courses.api.dto.ConferenceCreateDto;
 import ua.raif.courses.api.dto.ConferenceViewDto;
@@ -10,11 +12,11 @@ import ua.raif.courses.dao.ConferenceDao;
 import ua.raif.courses.dao.entity.ConferenceEntity;
 import ua.raif.courses.domain.Conference;
 import ua.raif.courses.exceptions.AlreadyExistsException;
+import ua.raif.courses.exceptions.DateValidationException;
 import ua.raif.courses.exceptions.NotExistsException;
-import ua.raif.courses.serivce.validators.ConferenceDatesOverlapValidator;
-import ua.raif.courses.serivce.validators.ConferenceExistValidator;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +32,9 @@ public class ConferenceServiceImpl implements ConferenceService {
     public ConferenceViewDto addConference(ConferenceCreateDto conferenceDto) {
         Conference conference = Conference.fromDto(conferenceDto);
 
-        new ConferenceExistValidator(this).validate(conference, null);
-        new ConferenceDatesOverlapValidator(this).validate(conference.getDates(), null);
-
+        validateConferenceExists(conference);
+        validateConferenceDatesOverlaps(conference);
+        
         return Conference.fromEntity(conferenceDao.save(conference.asEntity())).asDto();
     }
 
@@ -75,11 +77,25 @@ public class ConferenceServiceImpl implements ConferenceService {
         return Conference.fromEntity(conference).asDto();
     }
 
+    void validateConferenceExists(Conference conference) {
+        if (conferenceDao.existsByCaption(conference.getCaption())) {
+            LOG.info("Conference with caption <" + conference.getCaption() + "> already exists.");
+            throw new AlreadyExistsException("Conference with caption <" + conference.getCaption() + "> already exists.");
+        }
+    }
 
-    public boolean isConferenceExist(String caption) {
-        ConferenceEntity confereseExample = new ConferenceEntity();
-        confereseExample.setCaption(caption);
-        return conferenceDao.exists(Example.of(confereseExample));
+    void validateConferenceDatesOverlaps(Conference newConference) {
+        var conferences = getAll();
+
+        RangeSet<LocalDate> dateRangeSet = TreeRangeSet.create();
+        for (ConferenceEntity conference : conferences) {
+            dateRangeSet.add(Range.closed(conference.getDateStart(), conference.getDateEnd()));
+        }
+        if (dateRangeSet.intersects(Range.closed(newConference.getDates().getStartDate(), newConference.getDates().getEndDate()))) {
+            LOG.info("Date of conferences is overlaps.");
+            throw new DateValidationException("Date of conferences is overlaps.");
+
+        }
     }
 
 }
