@@ -34,7 +34,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 
         validateConferenceExists(conference);
         validateConferenceDatesOverlaps(conference);
-        
+
         return Conference.fromEntity(conferenceDao.save(conference.asEntity())).asDto();
     }
 
@@ -51,13 +51,10 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     @Override
     public List<ConferenceViewDto> findAllConferences() {
-
         List<ConferenceEntity> conferences = getAll();
         List<ConferenceViewDto> conferenceViewDtos = new ArrayList<>();
 
-        for (ConferenceEntity conference : conferences) {
-            conferenceViewDtos.add(Conference.fromEntity(conference).asDto());
-        }
+        conferences.forEach((c) -> conferenceViewDtos.add(Conference.fromEntity(c).asDto()));
         return conferenceViewDtos;
     }
 
@@ -88,9 +85,8 @@ public class ConferenceServiceImpl implements ConferenceService {
         var conferences = getAll();
 
         RangeSet<LocalDate> dateRangeSet = TreeRangeSet.create();
-        for (ConferenceEntity conference : conferences) {
-            dateRangeSet.add(Range.closed(conference.getDateStart(), conference.getDateEnd()));
-        }
+        conferences.forEach((c)->dateRangeSet.add(Range.closed(c.getDateStart(), c.getDateEnd())));
+
         if (dateRangeSet.intersects(Range.closed(newConference.getDates().getStartDate(), newConference.getDates().getEndDate()))) {
             LOG.info("Date of conferences is overlaps.");
             throw new DateValidationException("Date of conferences is overlaps.");

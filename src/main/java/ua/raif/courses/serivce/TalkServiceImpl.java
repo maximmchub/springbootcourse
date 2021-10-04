@@ -48,10 +48,8 @@ public class TalkServiceImpl implements TalkService {
         List<TalkEntity> talks = talkDao.findAllByConferenceId(id);
 
         List<TalkViewDto> talkViewDtos = new ArrayList<>();
+        talks.forEach((c) -> talkViewDtos.add(Talk.fromEntity(c).asDto()));
 
-        for (TalkEntity talk : talks) {
-            talkViewDtos.add(Talk.fromEntity(talk).asDto());
-        }
         return talkViewDtos;
     }
 
