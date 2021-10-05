@@ -16,10 +16,6 @@ public interface ConferenceService {
 
     List<ConferenceViewDto> findAllConferences();
 
-    ConferenceViewDto getConferenceById(Long id);
-
-    List<ConferenceEntity> getAll();
-
     ConferenceEntity getById(Long id);
 
 }

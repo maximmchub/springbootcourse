@@ -50,7 +50,6 @@ public class ConferenceRestController {
         return talkService.findAllTalksInConference(conferenceId);
     }
 
-
     @ExceptionHandler({ConstraintViolationException.class, IllegalArgumentException.class, InvalidRequestException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Bad request data")
     void onSaveError() {

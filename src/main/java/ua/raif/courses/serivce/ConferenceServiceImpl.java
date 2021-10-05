@@ -58,7 +58,6 @@ public class ConferenceServiceImpl implements ConferenceService {
         return conferenceViewDtos;
     }
 
-    @Override
     public List<ConferenceEntity> getAll() {
         return conferenceDao.findAll();
     }
@@ -66,12 +65,6 @@ public class ConferenceServiceImpl implements ConferenceService {
     @Override
     public ConferenceEntity getById(Long id) {
         return conferenceDao.findById(id).orElseThrow(() -> new NotExistsException("Falid to cet conference #" + id + ". Confrerence not exists."));
-    }
-
-    @Override
-    public ConferenceViewDto getConferenceById(Long id) {
-        ConferenceEntity conference = getById(id);
-        return Conference.fromEntity(conference).asDto();
     }
 
     void validateConferenceExists(Conference conference) {
@@ -85,12 +78,11 @@ public class ConferenceServiceImpl implements ConferenceService {
         var conferences = getAll();
 
         RangeSet<LocalDate> dateRangeSet = TreeRangeSet.create();
-        conferences.forEach((c)->dateRangeSet.add(Range.closed(c.getDateStart(), c.getDateEnd())));
+        conferences.forEach((c) -> dateRangeSet.add(Range.closed(c.getDateStart(), c.getDateEnd())));
 
         if (dateRangeSet.intersects(Range.closed(newConference.getDates().getStartDate(), newConference.getDates().getEndDate()))) {
             LOG.info("Date of conferences is overlaps.");
             throw new DateValidationException("Date of conferences is overlaps.");
-
         }
     }
 

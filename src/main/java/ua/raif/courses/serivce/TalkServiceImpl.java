@@ -28,19 +28,26 @@ public class TalkServiceImpl implements TalkService {
 
     @Override
     public TalkViewDto addTalk(TalkCreateDto talk, Long conferenceId) {
-        if (talkDao.existsAllByCaption(talk.getCaption())) {
-            throw new AlreadyExistsException("Talk with caption <" + talk.getCaption() + "> already exists.");
-        }
-
-        if (talkDao.countAllBySpeaker(talk.getSpeaker()) > 2) {
-            throw new SpeakerException("Speaker <" + talk.getSpeaker() + "> has too many talks.");
-        }
+        validateCaptionDuplication(talk);
+        validateSpeakerDuplication(talk);
 
         Conference conference = Conference.fromEntity(conferenceService.getById(conferenceId));
         validateConferenceStartdate(conference);
 
         TalkEntity dbTalk = Talk.fromDto(talk, conference.asEntity()).asEntity();
         return Talk.fromEntity(talkDao.save(dbTalk)).asDto();
+    }
+
+    void validateSpeakerDuplication(TalkCreateDto talk) {
+        if (talkDao.countAllBySpeaker(talk.getSpeaker()) > 2) {
+            throw new SpeakerException("Speaker <" + talk.getSpeaker() + "> has too many talks.");
+        }
+    }
+
+     void validateCaptionDuplication(TalkCreateDto talk) {
+        if (talkDao.existsAllByCaption(talk.getCaption())) {
+            throw new AlreadyExistsException("Talk with caption <" + talk.getCaption() + "> already exists.");
+        }
     }
 
     @Override
@@ -53,7 +60,7 @@ public class TalkServiceImpl implements TalkService {
         return talkViewDtos;
     }
 
-    public void validateConferenceStartdate(Conference conference) {
+    void validateConferenceStartdate(Conference conference) {
         LocalDate deadLineDate = conference.getDates().getStartDate().minusMonths(1);
         if (LocalDate.now().isAfter(deadLineDate)) {
             LOG.info("Date is after deadline.");

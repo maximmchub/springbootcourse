@@ -1,4 +1,4 @@
-package ua.raif.cources;
+package ua.raif.courses;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
