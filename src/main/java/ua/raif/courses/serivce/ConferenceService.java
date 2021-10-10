@@ -8,11 +8,10 @@ import ua.raif.courses.dao.entity.ConferenceEntity;
 import javax.validation.Valid;
 import java.util.List;
 
-@Validated
 public interface ConferenceService {
-    ConferenceViewDto addConference(@Valid ConferenceCreateDto conference);
+    ConferenceViewDto addConference(ConferenceCreateDto conference);
 
-    ConferenceViewDto updateConference(@Valid ConferenceCreateDto conference, Long conferenceId);
+    ConferenceViewDto updateConference(ConferenceCreateDto conference, Long conferenceId);
 
     List<ConferenceViewDto> findAllConferences();
 

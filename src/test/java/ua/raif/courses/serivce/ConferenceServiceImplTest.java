@@ -1,6 +1,6 @@
 package ua.raif.courses.serivce;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,14 +54,14 @@ class ConferenceServiceImplTest {
     @Test
     void validatorDatesOverlaps() {
         doReturn(Collections.singletonList(getEnitiy())).when(conferenceDao).findAll();
-        Assert.assertThrows(DateValidationException.class, () -> conferenceService.validateConferenceDatesOverlaps(Conference.fromDto(conferenceDto)));
+        Assertions.assertThrows(DateValidationException.class, () -> conferenceService.validateConferenceDatesOverlaps(Conference.fromDto(conferenceDto)));
     }
 
     @Test
     void validatorCaptionDuplicates() {
         doReturn(true).when(conferenceDao).existsByCaption(anyString());
 
-        Assert.assertThrows(AlreadyExistsException.class, () -> conferenceService.validateConferenceExists(Conference.fromDto(conferenceDto)));
+        Assertions.assertThrows(AlreadyExistsException.class, () -> conferenceService.validateConferenceExists(Conference.fromDto(conferenceDto)));
     }
 
     @Test
@@ -78,7 +78,7 @@ class ConferenceServiceImplTest {
     void updateConferenceWrongId() {
         doReturn(false).when(conferenceDao).existsById(anyLong());
 
-        Assert.assertThrows(NotExistsException.class, () -> conferenceService.updateConference(conferenceDto, 2L));
+        Assertions.assertThrows(NotExistsException.class, () -> conferenceService.updateConference(conferenceDto, 2L));
     }
 
     @Test
@@ -87,7 +87,7 @@ class ConferenceServiceImplTest {
 
         var conferences = conferenceService.findAllConferences();
 
-        Assert.assertEquals(1, conferences.size());
+        Assertions.assertEquals(1, conferences.size());
     }
 
 
@@ -96,7 +96,7 @@ class ConferenceServiceImplTest {
         doReturn(Optional.of(getEnitiy())).when(conferenceDao).findById(anyLong());
         var conference = conferenceService.getById(2L);
 
-        Assert.assertEquals("Conference Despcription", conference.getDescription());
+        Assertions.assertEquals("Conference Despcription", conference.getDescription());
     }
 
     private ConferenceEntity getEnitiy() {
@@ -105,7 +105,7 @@ class ConferenceServiceImplTest {
 
     @Test
     void getByIdNotExists() {
-        Assert.assertThrows(NotExistsException.class, () -> conferenceService.getById(2L));
+        Assertions.assertThrows(NotExistsException.class, () -> conferenceService.getById(2L));
     }
 
 }

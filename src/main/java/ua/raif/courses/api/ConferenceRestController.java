@@ -3,6 +3,7 @@ package ua.raif.courses.api;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ua.raif.courses.api.dto.ConferenceCreateDto;
 import ua.raif.courses.api.dto.ConferenceViewDto;
@@ -17,6 +18,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.List;
 
+
 @RestController
 @AllArgsConstructor
 @RequestMapping(path = "/conferences")
@@ -25,7 +27,7 @@ public class ConferenceRestController {
     private final TalkService talkService;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    ConferenceViewDto addConference(@RequestBody ConferenceCreateDto conference) {
+    ConferenceViewDto addConference(@RequestBody @Valid ConferenceCreateDto conference) {
         return conferenceService.addConference(conference);
     }
 

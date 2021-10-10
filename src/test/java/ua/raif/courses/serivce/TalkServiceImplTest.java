@@ -1,6 +1,5 @@
 package ua.raif.courses.serivce;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,8 +21,8 @@ import ua.raif.courses.exceptions.SpeakerException;
 import java.time.LocalDate;
 import java.util.Collections;
 
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,7 +54,7 @@ class TalkServiceImplTest {
     @Test
     void addTalk() {
         doReturn(getConference()).when(conferenceService).getById(anyLong());
-        doReturn(Talk.fromDto(talkDto,getConference()).asEntity()).when(talkDao).save(any(TalkEntity.class));
+        doReturn(Talk.fromDto(talkDto, getConference()).asEntity()).when(talkDao).save(any(TalkEntity.class));
         talkService.addTalk(talkDto, 2L);
 
         verify(talkDao, times(1)).save(any(TalkEntity.class));
@@ -63,7 +62,7 @@ class TalkServiceImplTest {
 
     @Test
     void findAllTalksInConference() {
-        doReturn(Collections.singletonList(Talk.fromDto(talkDto,getConference()).asEntity())).when(talkDao).findAllByConferenceId(anyLong());
+        doReturn(Collections.singletonList(Talk.fromDto(talkDto, getConference()).asEntity())).when(talkDao).findAllByConferenceId(anyLong());
         var talks = talkService.findAllTalksInConference(2L);
 
         Assertions.assertEquals(1, talks.size());
@@ -77,9 +76,9 @@ class TalkServiceImplTest {
     @Test
     void invalidConferenceStartDate() {
         var conference = Conference.fromEntity(getConference());
-        conference.setDates(new ConferenceDates(LocalDate.of(2020, 2, 2),LocalDate.of(2120, 2, 2)));
+        conference.setDates(new ConferenceDates(LocalDate.of(2020, 2, 2), LocalDate.of(2120, 2, 2)));
 
-        Assert.assertThrows(DateValidationException.class, ()->talkService.validateConferenceStartdate(conference));
+        Assertions.assertThrows(DateValidationException.class, () -> talkService.validateConferenceStartdate(conference));
     }
 
     @Test
@@ -91,7 +90,7 @@ class TalkServiceImplTest {
     @Test
     void speakerDuplicates() {
         doReturn(3).when(talkDao).countAllBySpeaker(anyString());
-        Assert.assertThrows(SpeakerException.class, ()->talkService.validateSpeakerDuplication(talkDto));
+        Assertions.assertThrows(SpeakerException.class, () -> talkService.validateSpeakerDuplication(talkDto));
     }
 
     @Test
@@ -103,7 +102,7 @@ class TalkServiceImplTest {
     @Test
     void captionDuplicates() {
         doReturn(true).when(talkDao).existsAllByCaption(anyString());
-        Assert.assertThrows(AlreadyExistsException.class, ()->talkService.validateCaptionDuplication(talkDto));
+        Assertions.assertThrows(AlreadyExistsException.class, () -> talkService.validateCaptionDuplication(talkDto));
     }
 
 

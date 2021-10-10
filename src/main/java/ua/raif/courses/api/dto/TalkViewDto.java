@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TalkViewDto {
-    String id;
+    Long id;
     String caption;
     String description;
     String speaker;

@@ -1,0 +1,8 @@
+<!DOCTYPE dataset SYSTEM "src/test/resources/datasets/database.dtd">
+
+<dataset>
+    <conference id="1" caption="First" description="Archeological" capacity="250" date_start="2020-02-02" date_end="2020-02-02"/>
+</dataset>
+
+
+

@@ -67,7 +67,7 @@ public class Talk {
                 .description(description)
                 .speaker(speaker)
                 .talkType(type.getId())
-                .id(String.valueOf(id))
+                .id(id)
                 .build();
     }
 }
