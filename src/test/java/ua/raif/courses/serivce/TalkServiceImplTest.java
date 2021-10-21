@@ -1,5 +1,6 @@
 package ua.raif.courses.serivce;
 
+import io.micrometer.core.instrument.Counter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,8 @@ class TalkServiceImplTest {
 
     private TalkCreateDto talkDto;
 
+    @Mock
+    private Counter counter;
 
     @BeforeEach
     void setUp() {

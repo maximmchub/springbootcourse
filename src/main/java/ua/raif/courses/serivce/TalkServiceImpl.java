@@ -1,6 +1,6 @@
 package ua.raif.courses.serivce;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.raif.courses.api.dto.TalkCreateDto;
@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TalkServiceImpl implements TalkService {
     private final TalkDao talkDao;
     private final ConferenceService conferenceService;
@@ -35,7 +35,9 @@ public class TalkServiceImpl implements TalkService {
         validateConferenceStartdate(conference);
 
         TalkEntity dbTalk = Talk.fromDto(talk, conference.asEntity()).asEntity();
-        return Talk.fromEntity(talkDao.save(dbTalk)).asDto();
+
+        TalkViewDto talkViewDto = Talk.fromEntity(talkDao.save(dbTalk)).asDto();
+        return talkViewDto;
     }
 
     void validateSpeakerDuplication(TalkCreateDto talk) {
@@ -44,7 +46,7 @@ public class TalkServiceImpl implements TalkService {
         }
     }
 
-     void validateCaptionDuplication(TalkCreateDto talk) {
+    void validateCaptionDuplication(TalkCreateDto talk) {
         if (talkDao.existsAllByCaption(talk.getCaption())) {
             throw new AlreadyExistsException("Talk with caption <" + talk.getCaption() + "> already exists.");
         }

@@ -3,7 +3,7 @@ package ua.raif.courses.serivce;
 import com.google.common.collect.Range;
 import com.google.common.collect.RangeSet;
 import com.google.common.collect.TreeRangeSet;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.raif.courses.api.dto.ConferenceCreateDto;
@@ -14,7 +14,6 @@ import ua.raif.courses.domain.Conference;
 import ua.raif.courses.exceptions.AlreadyExistsException;
 import ua.raif.courses.exceptions.DateValidationException;
 import ua.raif.courses.exceptions.NotExistsException;
-
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ConferenceServiceImpl implements ConferenceService {
     private final ConferenceDao conferenceDao;
 

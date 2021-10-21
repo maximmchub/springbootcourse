@@ -1,5 +1,7 @@
 package ua.raif.courses.serivce;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,7 @@ class ConferenceServiceImplTest {
     private ConferenceServiceImpl conferenceService;
 
     private ConferenceCreateDto conferenceDto;
+
 
     @BeforeEach
     void setUp() {

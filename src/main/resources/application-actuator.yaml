@@ -1,0 +1,33 @@
+spring:
+  security:
+    user:
+      name:
+      password:
+      roles: ADMIN
+  application:
+    admin:
+      enabled: true
+  jmx:
+    enabled: true
+
+management:
+  security:
+    role: ADMIN
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      probes:
+        enabled: true
+  endpoints:
+    jmx:
+      exposure:
+        include: 'health, health-path, prometheus, info'
+    web:
+      base-path: /admin
+      exposure:
+        include: 'health, health-path, prometheus, info'
+  info:
+    git:
+      mode: full
+
