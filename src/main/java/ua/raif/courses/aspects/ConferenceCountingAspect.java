@@ -47,7 +47,7 @@ public class ConferenceCountingAspect {
 
     @AfterThrowing("addingConference()")
     public void countConferenceNegative() {
-        talksCounterNeg.increment();
+        conferenceCounterNeg.increment();
     }
 
     @AfterReturning("addingTalk()")
