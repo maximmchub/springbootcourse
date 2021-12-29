@@ -17,9 +17,6 @@ spring:
     database:
       replace: none
 
-library:
-  size: 0
-
 logging:
   level:
     com.github.database.rider: DEBUG

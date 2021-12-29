@@ -93,7 +93,7 @@ class ConferenceRestControllerTest {
     @Test
     public void conferenceHasEmptyDescription() throws Exception {
         //doReturn(buildValidConferenceView()).when(conferenceService).addConference(refEq(conference));
-        conference.setCaption("");
+        conference.setDescription("");
         mockMvc.perform(post("/conferences")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(asJsonString(conference)))

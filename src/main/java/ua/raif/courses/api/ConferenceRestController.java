@@ -32,7 +32,7 @@ public class ConferenceRestController {
     }
 
     @PutMapping(path = "/{conferenceId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ConferenceViewDto updateConference(@PathVariable("conferenceId") long conferenceId, @RequestBody @Valid ConferenceCreateDto conference) {
+    ConferenceViewDto updateConference(@PathVariable long conferenceId, @RequestBody @Valid ConferenceCreateDto conference) {
         return conferenceService.updateConference(conference, conferenceId);
     }
 

@@ -24,7 +24,7 @@ spring:
     deserialization:
       fail-on-unknown-properties: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/conferencemanager
+    url: jdbc:postgresql://db:5432/conferencemanager
     username: postgres
     password: postgresql
     driver-class-name: org.postgresql.Driver
@@ -46,7 +46,3 @@ spring:
         batch_versioned_data: true
     open-in-view: false
 
-
-logging:
-  file:
-    name: conferencemanager.log
