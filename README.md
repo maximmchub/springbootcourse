@@ -19,7 +19,7 @@ This service is responsible for creating and process clients requests.
 
 ## Service API
 
-Service exposes [REST API](https://cards-admin.dev.apps.test-avalaunch.aval/swagger-ui/?urls.primaryName=card-opening) for creating and processing client requests.
+Service exposes [REST API](https://editor.swagger.io/?_ga=2.40922853.672648488.1640770285-1123841614.1594292781) for creating and processing client requests.
 
 Some REST API endpoints are protected with JWT based authorization (personal or service to service).
 
