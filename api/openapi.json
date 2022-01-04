@@ -1,0 +1,167 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "v1",
+    "title": "Customer Request Service API",
+    "description": "Service for registration clients requests"
+  },
+  "servers": [
+    {
+      "url": "https://dev.clients.aval.ua/v1",
+      "description": "Service for registration clients requests"
+    }
+  ],
+  "paths": {
+    "/requests/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "clientId",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "description": "get a request by id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientReqDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "delete": {
+        "description": "delete a request by id",
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientReqDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/requests": {
+      "parameters": [
+        {
+          "name": "clientId",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "description": "get all requests",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientReqDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Add a new request",
+        "operationId": "addNewClientReq",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "newRequest",
+            "description": "new request",
+            "schema": {
+              "$ref": "#/components/schemas/NewClientReqDTO"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientReqDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NewClientReqDTO": {
+        "type": "object",
+        "properties": {
+          "reqText": {
+            "type": "string",
+            "example": "problem description"
+          }
+        }
+      },
+      "ClientReqDTO": {
+        "type": "object",
+        "properties": {
+          "reqId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "reqText": {
+            "type": "string",
+            "example": "problem description"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "new",
+              "inWork",
+              "canceled",
+              "closed"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
