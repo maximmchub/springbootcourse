@@ -1,4 +1,4 @@
-# Customer Feedback Service
+# Client Feedback Service
 ## Description
 This service is responsible for creating and store clients feedbac.
 
