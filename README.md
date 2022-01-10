@@ -1,6 +1,6 @@
-# Customer Request Service
+# Customer Feedback Service
 ## Description
-This service is responsible for creating and process clients requests.
+This service is responsible for creating and store clients feedbac.
 
 ## Technical details
 
@@ -12,10 +12,10 @@ This service is responsible for creating and process clients requests.
 
 ## Architectural diagram
 
-![Architectural diagram](./doc/customer-request-service.JPG)
+![Architectural diagram](doc/architecture.jpg)
 
 ## Sequence diagram
-![Sequence diagram](doc/sequence-diagramm.JPG)
+![Sequence diagram](doc/sequence-diagram.JPG)
 
 ## Service API
 
@@ -27,16 +27,13 @@ Some REST API endpoints are protected with JWT based authorization (personal or 
 
 #### PostgreSQL DB
 
-**tickets** - main DB schema to store cliemt requests.
-
-**history** - table to store ticket poscessing history and statuses.
+**feedbacks** - main DB schema to store client feedbacks.
 
 #### Kafka topics
 
 | Topic name | Cluster | Permissions | Description |
 | ---------- | ------- | ----------- | ----------- |
-| **prod.clients.event.ticket-created** | INTERNAL | WRITE | Ticket created request processing events |
-| **prod.clients.event.ticket-changed** | INTERNAL | WRITE | Ticket changed request processing events |
+| **prod.clients.message.feedback** | INTERNAL | WRITE | Ticket created request processing events |
 
 ## Integrations
 
